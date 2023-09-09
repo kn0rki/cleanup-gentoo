@@ -15,155 +15,149 @@ rm -rf /var/tmp/portage/*
 rm -rf /var/tmp/ccache/*
 rm -rf /var/tmp/binpkgs/*
 rm -rf /var/tmp/genkernel/*
-rm -rf /tmp/*
+#rm -rf /tmp/*
 rm -rf /var/cache/genkernel/*
 echo
 
 echo "* Clean contents of /usr/portage/distfiles? Y/N"
 echo "Source code archives and distribution files for older versions of programs are not automatically removed when a new version is emerged. "
-read -r cleanDistfiles
-if [ "$cleanDistfiles" = "Y" ] || [ "$cleanDistfiles" = "y" ]; then
-	rm -rf /usr/portage/distfiles/*
-fi
+rm -rf /usr/portage/distfiles/*
+
 
 echo
 echo "* Remove contents of /usr/portage/packages? Y/N"
 echo "As with distribution files, binary packages are not automatically removed. "
-read -r cleanPackages
-if [ "$cleanPackages" = "Y" ] || [ "$cleanPackages" = "y" ]; then
 	rm -rf /usr/portage/packages/*
-fi
+
 
 echo
-echo "Enter kernel module cleaning menu? Y/N"
-echo "Module files installed after kernel compilation are not tracked by the package manager an thus are not deleted after being unmerged. "
-read -r cleanModules
-if [ "$cleanModules" = "Y" ] || [ "$cleanModules" = "y" ]; then
-	echo "Select each entry by the its number to delete it then when done type exit to exit"
-	echo
-	for (( ; ; )); do
-		ls -l /lib64/modules/ | sed 1d | cat -n
-		deleteConfirmation=
-		read -r moduleSelection
-		if [ "$moduleSelection" = "exit" ] || [ "$moduleSelection" = "Exit" ]; then
-			echo "Exiting now"
-			break
-		fi
-		moduleToDelete=$(ls /lib64/modules/ | sed -n $moduleSelection\p)
-		echo
-		echo "Are you sure you want to delete the modules for $moduleToDelete? Y/N or exit"
-		read -r deleteConfirmation
-		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
-			echo "* Deleting modules.. please wait"
-			rm -rf /lib64/modules/"$moduleToDelete"/
-			if [ $? -eq 0 ]; then
-				echo "Deletion complete.."
-				echo
-				echo "Select each entry to delete then when done type exit at any time to exit"
-				echo
-			fi
-		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
-			echo "Returning back.."
-		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
-			echo "Exiting now"
-			break
-		else
-			echo "Exiting now"
-			break
-		fi
-	done
-fi
-
-echo
-echo "Enter kernel sources cleaning menu? Y/N"
-echo "As with module files, kernel object files are not removed by the package manager. "
-read -r cleanKernels
-if [ "$cleanKernels" = "Y" ] || [ "$cleanKernels" = "y" ]; then
-	echo "Select each entry to delete then when done type exit at any time to exit"
-	echo
-	for (( ; ; )); do
-		ls -l --hide=linux /usr/src/ | sed 1d | cat -n
-		deleteConfirmation=
-		read -r kernelSelection
-		if [ $kernelSelection = "exit" ] || [ $kernelSelection = "Exit" ]; then
-			echo "Exiting now"
-			break
-		fi
-		kernelToDelete=$(ls -l --hide=linux /usr/src/ | sed 1d | awk '/linux/{print $9}' | sed -n $kernelSelection\p)
-		echo
-		echo "Are you sure you want to delete the kernel $kernelToDelete? Y/N or exit"
-		read -r deleteConfirmation
-		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
-			rm -rf /usr/src/"$kernelToDelete"/
-			if [ $? -eq 0 ]; then
-				echo "Deletion complete.."
-				echo
-				echo "Select each entry to delete then when done type exit at any time to exit"
-				echo
-			fi
-		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
-			echo "Returning back.."
-		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
-			echo "Exiting now"
-			break
-		else
-			echo "Exiting now"
-			break
-		fi
-	done
-fi
-
-echo
-echo "Enter /boot kernel cleaning menu? Y/N"
-echo "Removing old kernels that have accumulated can save space."
-read -r cleanBootKernels
-if [ "$cleanBootKernels" = "Y" ] || [ "$cleanBootKernels" = "y" ]; then
-	echo "Select each entry to delete then when done type exit at any time to exit"
-	echo
-	for (( ; ; )); do
-		ls -l --hide=config* --hide=initramfs* --hide=System.map* --hide=.keep --hide=grub* /boot | sed 1d | cat -n
-		deleteConfirmation=
-		read -r bootKernelSelection
-		if [ $bootKernelSelection = "exit" ] || [ $bootKernelSelection = "Exit" ]; then
-			echo "Exiting now"
-			break
-		fi
-		kernelToDelete=$(ls -l --hide=config* --hide=initramfs* --hide=System.map* --hide=.keep --hide=grub* /boot | awk '{print $9}' | sed 1d | sed -n $bootKernelSelection\p)
-		echo
-		echo "Are you sure you want to delete the kernel $kernelToDelete? Y/N or exit"
-		read -r deleteConfirmation
-		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
-			rm /boot/$kernelToDelete
-			if [ $? -eq 0 ]; then
-				echo "Deletion complete.."
-				echo
-				echo "Select each entry to delete then when done type exit at any time to exit"
-				echo
-			fi
-		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
-			echo "Returning back.."
-		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
-			echo "Exiting now"
-			break
-		else
-			echo "Exiting now"
-			break
-		fi
-	done
-	echo
-	echo "Note that only kernels are deleted, associated initramfs, System.map, config will need to be manually deleted."
-fi
+#
+#echo "Enter kernel module cleaning menu? Y/N"
+#echo "Module files installed after kernel compilation are not tracked by the package manager an thus are not deleted after being unmerged. "
+#read -r cleanModules
+#if [ "$cleanModules" = "Y" ] || [ "$cleanModules" = "y" ]; then
+#	echo "Select each entry by the its number to delete it then when done type exit to exit"
+#	echo
+#	for (( ; ; )); do
+#		ls -l /lib64/modules/ | sed 1d | cat -n
+#		deleteConfirmation=
+#		read -r moduleSelection
+#		if [ "$moduleSelection" = "exit" ] || [ "$moduleSelection" = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		fi
+#		moduleToDelete=$(ls /lib64/modules/ | sed -n $moduleSelection\p)
+#		echo
+#		echo "Are you sure you want to delete the modules for $moduleToDelete? Y/N or exit"
+#		read -r deleteConfirmation
+#		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
+#			echo "* Deleting modules.. please wait"
+#			rm -rf /lib64/modules/"$moduleToDelete"/
+#			if [ $? -eq 0 ]; then
+#				echo "Deletion complete.."
+#				echo
+#				echo "Select each entry to delete then when done type exit at any time to exit"
+#				echo
+#			fi
+#		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
+#			echo "Returning back.."
+#		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		else
+#			echo "Exiting now"
+#			break
+#		fi
+#	done
+#fi
+#
+#echo
+#echo "Enter kernel sources cleaning menu? Y/N"
+#echo "As with module files, kernel object files are not removed by the package manager. "
+#read -r cleanKernels
+#if [ "$cleanKernels" = "Y" ] || [ "$cleanKernels" = "y" ]; then
+#	echo "Select each entry to delete then when done type exit at any time to exit"
+#	echo
+#	for (( ; ; )); do
+#		ls -l --hide=linux /usr/src/ | sed 1d | cat -n
+#		deleteConfirmation=
+#		read -r kernelSelection
+#		if [ $kernelSelection = "exit" ] || [ $kernelSelection = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		fi
+#		kernelToDelete=$(ls -l --hide=linux /usr/src/ | sed 1d | awk '/linux/{print $9}' | sed -n $kernelSelection\p)
+#		echo
+#		echo "Are you sure you want to delete the kernel $kernelToDelete? Y/N or exit"
+#		read -r deleteConfirmation
+#		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
+#			rm -rf /usr/src/"$kernelToDelete"/
+#			if [ $? -eq 0 ]; then
+#				echo "Deletion complete.."
+#				echo
+#				echo "Select each entry to delete then when done type exit at any time to exit"
+#				echo
+#			fi
+#		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
+#			echo "Returning back.."
+#		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		else
+#			echo "Exiting now"
+#			break
+#		fi
+#	done
+#fi
+#
+#echo
+#echo "Enter /boot kernel cleaning menu? Y/N"
+#echo "Removing old kernels that have accumulated can save space."
+#read -r cleanBootKernels
+#if [ "$cleanBootKernels" = "Y" ] || [ "$cleanBootKernels" = "y" ]; then
+#	echo "Select each entry to delete then when done type exit at any time to exit"
+#	echo
+#	for (( ; ; )); do
+#		ls -l --hide=config* --hide=initramfs* --hide=System.map* --hide=.keep --hide=grub* /boot | sed 1d | cat -n
+#		deleteConfirmation=
+#		read -r bootKernelSelection
+#		if [ $bootKernelSelection = "exit" ] || [ $bootKernelSelection = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		fi
+#		kernelToDelete=$(ls -l --hide=config* --hide=initramfs* --hide=System.map* --hide=.keep --hide=grub* /boot | awk '{print $9}' | sed 1d | sed -n $bootKernelSelection\p)
+#		echo
+#		echo "Are you sure you want to delete the kernel $kernelToDelete? Y/N or exit"
+#		read -r deleteConfirmation
+#		if [ "$deleteConfirmation" = "Y" ] || [ "$deleteConfirmation" = "y" ]; then
+#			rm /boot/$kernelToDelete
+#			if [ $? -eq 0 ]; then
+#				echo "Deletion complete.."
+#				echo
+#				echo "Select each entry to delete then when done type exit at any time to exit"
+#				echo
+#			fi
+#		elif [ "$deleteConfirmation" = "N" ] || [ "$deleteConfirmation" = "n" ]; then
+#			echo "Returning back.."
+#		elif [ "$deleteConfirmation" = "exit" ] || [ "$deleteConfirmation" = "Exit" ]; then
+#			echo "Exiting now"
+#			break
+#		else
+#			echo "Exiting now"
+#			break
+#		fi
+#	done
+#	echo
+#	echo "Note that only kernels are deleted, associated initramfs, System.map, config will need to be manually deleted."
+#fi
 
 echo
 echo "Clean firefox and chromium browser caches? Y/N"
-read -r browserClean
-if [ "$browserClean" = "Y" ] || [ "$browserClean" = "y" ]; then
 	echo "* Cleaning browser and other caches..."
 	rm -rf  /home/$user/.cache/chromium/Default/*
 	rm /home/$user/.mozilla/firefox/*.default/*.sqlite /home/$user/.mozilla/firefox/*default/sessionstore.js
 	rm -rf /home/$user/.cache/mozilla/firefox/*.default/*
 	echo
-fi
 
 echo "* Cleaning unused libraries and programs..."
 emerge -av --depclean
@@ -206,10 +200,7 @@ if [ "$isInstalledRotate" = *[!\ ]* ]; then
 	find /var/log/ -name '*[0-5]*' -exec rm {} \;
 else
 	echo "* Would you like to install logrotate to keep your logs clean? YES/NO"
-	read -r logrotate_answer
-	if [ "$logrotate_answer" = "YES" ] || [ "$logrotate_answer" = "yes" ]; then
-		emerge app-admin/logrotate
-	fi
+	emerge app-admin/logrotate
 fi
 
 echo
